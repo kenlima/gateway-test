@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,11 +42,12 @@ public class GwdemoApplication {
         return user;
     }
 
+
     @RequestMapping("/token")
     @ResponseBody
-    public Map<String, String> token(HttpSession session) {
+    public Map<String,String> token(HttpSession session) {
+        System.out.println("load token : " + session.getId());
         return Collections.singletonMap("token", session.getId());
-
     }
 
     @Configuration
@@ -54,13 +56,14 @@ public class GwdemoApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .httpBasic()
-                    .and()
+                    .httpBasic().and()
                     .authorizeRequests()
-                    .antMatchers("/index.html", "/home.html", "/login.html", "/").permitAll()
-                    .anyRequest().authenticated();
+                    .antMatchers("/index.html", "/home.html", "/login.html", "/").permitAll().anyRequest()
+                    .authenticated().and()
+                    .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
         }
     }
+
 
 
 }
