@@ -58,11 +58,16 @@ angular.module('hello', ['ngRoute'])
         }
     })
     .controller('home', function ($scope, $http) {
+
+        $http.get('resource/').success(function(data) {
+            $scope.greeting = data;
+        })
         /*
         $http.get('http://localhost:9000/').success(function(data) {
             $scope.greeting = data;
         })
         */
+        /*
         $http.get('token').success(function (token) {
             $http({
                 url: 'http://localhost:9000',
@@ -74,4 +79,5 @@ angular.module('hello', ['ngRoute'])
                 $scope.greeting = data;
             });
         })
+        */
     });
