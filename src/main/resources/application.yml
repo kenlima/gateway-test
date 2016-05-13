@@ -1,9 +1,12 @@
 security:
   user:
     password: password
-
+  sessions: NEVER
 zuul:
   routes:
     resource:
       path: /resource/**
       url: http://localhost:9000
+spring:
+  redis:
+    host: 192.168.99.100
